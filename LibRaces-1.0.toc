@@ -1,4 +1,4 @@
-## Interface: 70200
+## Interface: 70300
 ## Title: LibRaces-1.0
 ## Notes: A library to easy translate localized races names to generic token like strings
 ## Author: Hizuro

@@ -138,6 +138,6 @@ local races = {
     ["熊貓人"] = "Pandaren",
 };
 
-function lib:GetRaceToken(name)
-	return races[name:lower()];
+function lib.GetRaceToken(name)
+	return races[name];
 end
