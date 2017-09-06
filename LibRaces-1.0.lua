@@ -1,143 +1,313 @@
 
-local MAJOR, MINOR = "LibRaces-1.0", 4
+local MAJOR, MINOR = "LibRaces-1.0", 5
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not lib then return end
 
-local races = {
-    ["mensch"] = "Human",
-    ["orc"] = "Orc",
-    ["zwerg"] = "Dwarf",
-    ["nachtelf"] = "NightElf",
-    ["nachtelfe"] = "NightElf",
-    ["untoter"] = "Scourge",
-    ["untote"] = "Scourge",
-    ["tauren"] = "Tauren",
-    ["gnom"] = "Gnome",
-    ["troll"] = "Troll",
-    ["goblin"] = "Goblin",
-    ["blutelf"] = "BloodElf",
-    ["blutelfe"] = "BloodElf",
-    ["draenei"] = "Draenei",
-    ["worgen"] = "Worgen",
-    ["pandaren"] = "Pandaren",
-    ["human"] = "Human",
-    ["dwarf"] = "Dwarf",
-    ["night elf"] = "NightElf",
-    ["undead"] = "Scourge",
-    ["gnome"] = "Gnome",
-    ["blood elf"] = "BloodElf",
-    ["humano"] = "Human",
-    ["humana"] = "Human",
-    ["orco"] = "Orc",
-    ["enano"] = "Dwarf",
-    ["enana"] = "Dwarf",
-    ["elfo de la noche"] = "NightElf",
-    ["elfa de la noche"] = "NightElf",
-    ["no-muerto"] = "Scourge",
-    ["no-muerta"] = "Scourge",
-    ["gnomo"] = "Gnome",
-    ["gnoma"] = "Gnome",
-    ["trol"] = "Troll",
-    ["elfo de sangre"] = "BloodElf",
-    ["elfa de sangre"] = "BloodElf",
-    ["huargen"] = "Worgen",
-    ["humain"] = "Human",
-    ["humaine"] = "Human",
-    ["orque"] = "Orc",
-    ["nain"] = "Dwarf",
-    ["naine"] = "Dwarf",
-    ["elfe de la nuit"] = "NightElf",
-    ["mort-vivant"] = "Scourge",
-    ["morte-vivante"] = "Scourge",
-    ["taurène"] = "Tauren",
-    ["trollesse"] = "Troll",
-    ["gobelin"] = "Goblin",
-    ["gobeline"] = "Goblin",
-    ["elfe de sang"] = "BloodElf",
-    ["draeneï"] = "Draenei",
-    ["pandarène"] = "Pandaren",
-    ["umano"] = "Human",
-    ["umana"] = "Human",
-    ["orchessa"] = "Orc",
-    ["nano"] = "Dwarf",
-    ["nana"] = "Dwarf",
-    ["elfo della notte"] = "NightElf",
-    ["elfa della notte"] = "NightElf",
-    ["non morto"] = "Scourge",
-    ["non morta"] = "Scourge",
-    ["elfo del sangue"] = "BloodElf",
-    ["elfa del sangue"] = "BloodElf",
-    ["인간"] = "Human",
-    ["오크"] = "Orc",
-    ["드워프"] = "Dwarf",
-    ["나이트 엘프"] = "NightElf",
-    ["언데드"] = "Scourge",
-    ["타우렌"] = "Tauren",
-    ["노움"] = "Gnome",
-    ["트롤"] = "Troll",
-    ["고블린"] = "Goblin",
-    ["블러드 엘프"] = "BloodElf",
-    ["드레나이"] = "Draenei",
-    ["늑대인간"] = "Worgen",
-    ["판다렌"] = "Pandaren",
-    ["orquisa"] = "Orc",
-    ["anão"] = "Dwarf",
-    ["anã"] = "Dwarf",
-    ["elfo noturno"] = "NightElf",
-    ["elfa noturna"] = "NightElf",
-    ["morto-vivo"] = "Scourge",
-    ["morta-viva"] = "Scourge",
-    ["taurena"] = "Tauren",
-    ["gnomida"] = "Gnome",
-    ["trolesa"] = "Troll",
-    ["goblina"] = "Goblin",
-    ["elfo sangrento"] = "BloodElf",
-    ["elfa sangrenta"] = "BloodElf",
-    ["draenaia"] = "Draenei",
-    ["worgenin"] = "Worgen",
-    ["pandarena"] = "Pandaren",
-    ["Человек"] = "Human",
-    ["Орк"] = "Orc",
-    ["Дворф"] = "Dwarf",
-    ["Ночной эльф"] = "NightElf",
-    ["Ночная эльфийка"] = "NightElf",
-    ["Нежить"] = "Scourge",
-    ["Таурен"] = "Tauren",
-    ["Гном"] = "Gnome",
-    ["Тролль"] = "Troll",
-    ["Гоблин"] = "Goblin",
-    ["Эльф крови"] = "BloodElf",
-    ["Эльфийка крови"] = "BloodElf",
-    ["Дреней"] = "Draenei",
-    ["Дренейка"] = "Draenei",
-    ["Ворген"] = "Worgen",
-    ["Пандарен"] = "Pandaren",
-    ["人类"] = "Human",
-    ["兽人"] = "Orc",
-    ["矮人"] = "Dwarf",
-    ["暗夜精灵"] = "NightElf",
-    ["亡灵"] = "Scourge",
-    ["牛头人"] = "Tauren",
-    ["侏儒"] = "Gnome",
-    ["巨魔"] = "Troll",
-    ["地精"] = "Gnome",
-    ["血精灵"] = "BloodElf",
-    ["德莱尼"] = "Draenei",
-    ["狼人"] = "Worgen",
-    ["熊猫人"] = "Pandaren",
-    ["人類"] = "Human",
-    ["獸人"] = "Orc",
-    ["夜精靈"] = "NightElf",
-    ["不死族"] = "Scourge",
-    ["牛頭人"] = "Tauren",
-    ["食人妖"] = "Troll",
-    ["哥布林"] = "Goblin",
-    ["血精靈"] = "BloodElf",
-    ["德萊尼"] = "Draenei",
-    ["熊貓人"] = "Pandaren",
+local languageCodes = {en="enUS",de="deDE",es="esES",mx="esES",fr="frFR",it="itIT",ko="koKR",pt="ptBR",br="ptBR",ru="ruRU",cn="zhCN",tw="zhTW"};
+local altLangCode = {enUS="enGB",esES="esMX",ptBR="ptPT"};
+local genderEngStr = {[0]="NEUTRAL",[1]="MALE",[2]="FEMALE"};
+
+-- races[<localeLowerCasedStripped>] = <table of localized race names (ref. from data)>
+local races = {};
+
+-- toEnglish[<localeLowerCasedStripped>] = { <englishStripped>, <englishCaseSens> }
+local toEnglish = {};
+
+-- gender[<localeLowerCasedStripped>] = <number[0, 1, 2]> -- 0=neutral, 1=male, 2=female
+local gender = {};
+
+-- languages[<localeLowerCasedStripped>] = { "<langCode>", <langCode>=true }
+local language = {};
+
+-- data[<engLowerStripped>] = { <langCode> = { <langCode> = { <male>, <female> } } }
+local data = {
+	["human"] = {
+		deDE = {"Mensch","Mensch"},
+		enUS = {"Human","Human"},
+		esES = {"Humano","Humana"},
+		frFR = {"Humain","Humaine"},
+		itIT = {"Umano","Umana"},
+		koKR = {"인간","인간"},
+		ptBR = {"Humano","Humana"},
+		ruRU = {"Человек","Человек"},
+		zhCN = {"人类","人类"},
+		zhTW = {"人類","人類"}
+	},
+	["orc"] = {
+		deDE = {"Orc","Orcs"},
+		enUS = {"Orc","Orc"},
+		esES = {"Orco","Orco"},
+		frFR = {"Orc","Orque"},
+		itIT = {"Orco","Orchessa"},
+		koKR = {"오크","오크"},
+		ptBR = {"Orc","Orquisa"},
+		ruRU = {"Орк","Орк"},
+		zhCN = {"兽人","兽人"},
+		zhTW = {"獸人","獸人"}
+	},
+	["dwarf"] = {
+		deDE = {"Zwerg","Zwergin"},
+		enUS = {"Dwarf","Dwarf"},
+		esES = {"Enano","Enana"},
+		frFR = {"Nain","Naine"},
+		itIT = {"Nano","Nana"},
+		koKR = {"드워프","드워프"},
+		ptBR = {"Anão","Anã"},
+		ruRU = {"Дворф","Дворф"},
+		zhCN = {"矮人","矮人"},
+		zhTW = {"矮人","矮人"}
+	},
+	["nightelf"] = {
+		deDE = {"Nachtelf","Nachtelfe"},
+		enUS = {"Night Elf","Night Elf"},
+		esES = {"Elfo de la noche","Elfa de la noche"},
+		frFR = {"Elfe de la nuit","Elfe de la nuit"},
+		itIT = {"Elfo della Notte","Elfa della Notte"},
+		koKR = {"나이트 엘프","나이트 엘프"},
+		ptBR = {"Elfo Noturno","Elfa Noturna"},
+		ruRU = {"Ночной эльф","Ночная эльфийка"},
+		zhCN = {"暗夜精灵","暗夜精灵"},
+		zhTW = {"夜精靈","夜精靈"}
+	},
+	["scourge"] = {
+		deDE = {"Untoter","Untote"},
+		enUS = {"Undead","Undead"},
+		esES = {"No-muerto","No-muerta"},
+		frFR = {"Mort-vivant","Morte-vivante"},
+		itIT = {"Non Morto","Non Morta"},
+		koKR = {"언데드","언데드"},
+		ptBR = {"Morto-vivo","Morta-viva"},
+		ruRU = {"Нежить","Нежить"},
+		zhCN = {"亡灵","亡灵"},
+		zhTW = {"不死族","不死族"}
+	},
+	["tauren"] = {
+		deDE = {"Tauren","Tauren"},
+		enUS = {"Tauren","Tauren"},
+		esES = {"Tauren","Tauren"},
+		frFR = {"Tauren","Taurène"},
+		itIT = {"Tauren","Tauren"},
+		koKR = {"타우렌","타우렌"},
+		ptBR = {"Tauren","Taurena"},
+		ruRU = {"Таурен","Таурен"},
+		zhCN = {"牛头人","牛头人"},
+		zhTW = {"牛頭人","牛頭人"}
+	},
+	["gnome"] = {
+		deDE = {"Gnom","Gnom"},
+		enUS = {"Gnome","Gnome"},
+		esES = {"Gnomo","Gnoma"},
+		frFR = {"Gnome","Gnome"},
+		itIT = {"Gnomo","Gnoma"},
+		koKR = {"노움","노움"},
+		ptBR = {"Gnomo","Gnomida"},
+		ruRU = {"Гном","Гном"},
+		zhCN = {"侏儒","侏儒"},
+		zhTW = {"地精","地精"}
+	},
+	["troll"] = {
+		deDE = {"Troll","Trolle"},
+		enUS = {"Troll","Troll"},
+		esES = {"Trol","Trol"},
+		frFR = {"Troll","Trollesse"},
+		itIT = {"Troll","Troll"},
+		koKR = {"트롤","트롤"},
+		ptBR = {"Troll","Trolesa"},
+		ruRU = {"Тролль","Тролль"},
+		zhCN = {"巨魔","巨魔"},
+		zhTW = {"食人妖","食人妖"}
+	},
+	["goblin"] = {
+		deDE = {"Goblin","Goblin"},
+		enUS = {"Goblin","Goblin"},
+		esES = {"Goblin","Goblin"},
+		frFR = {"Gobelin","Gobeline"},
+		itIT = {"Goblin","Goblin"},
+		koKR = {"고블린","고블린"},
+		ptBR = {"Goblin","Goblina"},
+		ruRU = {"Гоблин","Гоблин"},
+		zhCN = {"地精","地精"},
+		zhTW = {"哥布林","哥布林"}
+	},
+	["bloodelf"] = {
+		deDE = {"Blutelf","Blutelfe"},
+		enUS = {"Blood Elf","Blood Elf"},
+		esES = {"Elfo de sangre","Elfa de sangre"},
+		frFR = {"Elfe de sang","Elfe de sang"},
+		itIT = {"Elfo del Sangue","Elfa del Sangue"},
+		koKR = {"블러드 엘프","블러드 엘프"},
+		ptBR = {"Elfo Sangrento","Elfa Sangrenta"},
+		ruRU = {"Эльф крови","Эльфийка крови"},
+		zhCN = {"血精灵","血精灵"},
+		zhTW = {"血精靈","血精靈"}
+	},
+	["draenei"] = {
+		deDE = {"Draenei","Draenei"},
+		enUS = {"Draenei","Draenei"},
+		esES = {"Draenei","Draenei"},
+		frFR = {"Draeneï","Draeneï"},
+		itIT = {"Draenei","Draenei"},
+		koKR = {"드레나이","드레나이"},
+		ptBR = {"Draenei","Draenaia"},
+		ruRU = {"Дреней","Дренейка"},
+		zhCN = {"德莱尼","德莱尼"},
+		zhTW = {"德萊尼","德萊尼"}
+	},
+	["worgen"] = {
+		deDE = {"Worgen","Worgen"},
+		enUS = {"Worgen","Worgen"},
+		esES = {"Huargen","Huargen"},
+		frFR = {"Worgen","Worgen"},
+		itIT = {"Worgen","Worgen"},
+		koKR = {"늑대인간","늑대인간"},
+		ptBR = {"Worgen","Worgenin"},
+		ruRU = {"Ворген","Ворген"},
+		zhCN = {"狼人","狼人"},
+		zhTW = {"狼人","狼人"}
+	},
+	["pandaren"] = {
+		deDE = {"Pandaren","Pandaren"},
+		enUS = {"Pandaren","Pandaren"},
+		esES = {"Pandaren","Pandaren"},
+		frFR = {"Pandaren","Pandarène"},
+		itIT = {"Pandaren","Pandaren"},
+		koKR = {"판다렌","판다렌"},
+		ptBR = {"Pandaren","Pandarena"},
+		ruRU = {"Пандарен","Пандарен"},
+		zhCN = {"熊猫人","熊猫人"},
+		zhTW = {"熊貓人","熊貓人"}
+	}
 };
 
-function lib.GetRaceToken(name)
-	return races[name];
+local function strip(str,normalize)
+	assert(type(str)=="string");
+	return (normalize==true and str:lower() or str):gsub(" ",""):gsub("-","");
+end
+
+local function Unpack(step,...)
+	if step==3 then -- step3
+		local name, engLower, engCaseSens, lang = ...;
+
+		-- fill toEnglish table
+		toEnglish[name] = {strip(engCaseSens),engCaseSens};
+
+		-- fill races table
+		races[name] = data[engLower];
+
+		-- file language table
+		if language[name]==nil then
+			language[name] = {};
+		end
+		if not language[name][lang] then
+			tinsert(language[name],lang);
+			language[name][lang] = true;
+		end
+
+		-- second run of step3 for alternative language code if exists
+		--if altLangCode[lang] then
+		--	Unpack(3,name, engLower, engCaseSens, altLangCode[lang]);
+		--end
+	elseif step==2 then -- step2
+		local engLower,engCaseSens,lang,localized = ...;
+
+		-- lowercase and stripped like realm names on character names
+		local localeFemaleStripped = strip(localized[2],true);
+		local localeMaleStripped   = strip(localized[1],true);
+
+		-- is locale name gender neutral
+		local isNeutral = localeMaleStripped==localeFemaleStripped;
+
+		-- fill gender table
+		if isNeutral then
+			gender[localeMaleStripped] = 0;
+		else
+			gender[localeFemaleStripped] = 2;
+			gender[localeMaleStripped] = 1;
+		end
+
+		Unpack(3,localeFemaleStripped, engLower, engCaseSens, lang);
+		if not isNeutral then
+			Unpack(3,localeMaleStripped, engLower, engCaseSens, lang);
+		end
+	else -- step1
+		for engLower, localizations in pairs(data) do
+			local engCaseSens = localizations.enUS[1];
+			-- english first
+			Unpack(2,engLower,engCaseSens,"enUS",localizations.enUS); -- exec Unpack step2
+			for lang, localized in pairs(localizations)do
+				if lang~="enUS" then
+					-- number, string, string, string, string
+					Unpack(2,engLower,engCaseSens,lang,localized); -- exec Unpack step2
+				end
+			end
+		end
+		Unpack = nil;
+		data = nil;
+		XYDB.Unpack = {
+			races = races,
+			toEnglish = toEnglish,
+			gender = gender,
+			language = language
+		}
+	end
+end
+
+function lib:GetRaceToken(name)
+	if self~=lib then name=self; end
+	if Unpack then Unpack(); end
+	local name = strip(name,true);
+	if toEnglish[name] then
+		return unpack(toEnglish[name]);
+	end
+end
+
+function lib:GetRaceName(raceName, lang, gender)
+	if self~=lib then raceName,lang,gender=self,raceName,lang; end
+	assert(type(raceName)=="string","<LibRaces-1.0>:GetRace(<raceName(string)>[,<languageCode(string)>[,<gender(number 1=male|2=female)>]])");
+
+	if type(lang)=="string" then
+		local _lang=strsub(lang,0,2):lower();
+		if _lang=="zh" then _lang=strsub(lang,3,4):lower(); end
+		lang = languageCodes[_lang];
+	else
+		lang = GetLocale();
+	end
+
+	if Unpack then Unpack(); end
+	local race = races[strip(raceName,true)];
+		if race and race[lang] then
+		if gender==1 or gender==2 then
+			return race[lang][gender];
+		end
+		return unpack(race[lang]); -- return male, female
+	end
+	-- nil on fail
+end
+
+function lib:GetLanguageByRaceName(name)
+	if self~=lib then name = self; end
+	assert(type(name)=="string");
+	if Unpack then Unpack(); end
+	local lang = {};
+	for _,v in ipairs(language[strip(name,true)] or {})do
+		tinsert(lang, v);
+		if altLangCode[v] then
+			tinsert(lang, altLangCode[v]);
+		end
+	end
+	if #lang>0 then
+		table.sort(lang);
+		return unpack(lang);
+	end
+end
+
+function lib:GetGenderByRaceName(name)
+	if self~=lib then name = self; end
+	assert(type(name)=="string");
+	if Unpack then Unpack(); end
+	local g = gender[strip(name,true)];
+	if g then
+		return g, genderEngStr[g]; -- 0=neutral, 1=male, 2=female
+	end
 end
