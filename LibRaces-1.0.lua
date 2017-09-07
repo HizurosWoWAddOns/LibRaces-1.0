@@ -244,12 +244,6 @@ local function Unpack(step,...)
 		end
 		Unpack = nil;
 		data = nil;
-		XYDB.Unpack = {
-			races = races,
-			toEnglish = toEnglish,
-			gender = gender,
-			language = language
-		}
 	end
 end
 
