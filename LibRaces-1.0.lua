@@ -322,3 +322,41 @@ function LibRaces:GetGenderByRaceName(name)
 		return g, genderEngStr[g]; -- 0=neutral, 1=male, 2=female
 	end
 end
+
+function LibRaces:GetAllNamesByLanguage(lang)
+	if self~=lib then lang = self; end
+	local result,tmp,lang,a,b = {},{};
+	print("lang",tostring(lang))
+	lang = GetLanguageCode(lang);
+	print("lang",tostring(lang))
+	for _,tbl in pairs(data)do
+		if tbl[lang] then
+			a,b = tbl[lang][1],tbl[lang][2];
+			if strlen(b)>strlen(a) then
+				a,b = b,a;
+			end
+			if not tmp[a] then
+				tinsert(result,a);
+				tmp[a] = true;
+			end
+			if not tmp[b] then
+				tinsert(result,b);
+				tmp[b] = true;
+			end
+		end
+	end
+	return result,lang;
+end
+
+function LibRaces:FindRaceNameInText(text)
+	if self~=lib then text = self; end
+	assert(type(text)=="string","Usage: <LibRaces-1.0>:FindRaceNameInText(<text>) - string expected, got "..type(text));
+	local names,res = LibRaces:GetAllNamesByLanguage();
+	-- damned limitation of lua pattern...
+	for i=1, #names do
+		res = text:match(names[i]:gsub(" ","[ ]*"):gsub("%-","[%-]*"));
+		if res then
+			return res, LibRaces:GetRaceToken(res);
+		end
+	end
+end
