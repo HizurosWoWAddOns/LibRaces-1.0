@@ -186,9 +186,7 @@ local data = {
 local function GetLanguageCode(lang)
 	if type(lang)=="string" then
 		local _lang=strsub(lang,0,2):lower();
-		print("1",_lang);
 		if _lang=="zh" then _lang=strsub(lang,3,4):lower(); end
-		print("2",_lang)
 		if languageCodes[_lang] then
 			return languageCodes[_lang];
 		end
@@ -262,18 +260,47 @@ local function Unpack(step,...)
 	end
 end
 
+--[[
+Notes:
+	* returns nil if no match found
+Arguments:
+	raceName -
+Returns:
+	englishToken - english version without spacer like realm name behind character names
+Example:
+	"NightElf", "Night Elf" = LibRaces:GetRaceToken("Elfe de la nuit")
+--]]
+
 --- Returns english race token and name from any client supported language
 -- @param name Race name (all client supported languages)
 -- @return English tokenized race name (without dashes and whitespaces)
 -- @return English race name
 function LibRaces:GetRaceToken(name)
-	if self~=lib then name=self; end
+	if self~=LibRaces then name=self; end
 	if Unpack then Unpack(); end
 	local name = strip(name,true);
 	if toEnglish[name] then
 		return unpack(toEnglish[name]);
 	end
 end
+
+--[[
+Notes:
+	* if lang nil or not match with client supported language codes then it fall back to current client language
+	* returns nil if no match found
+Arguments:
+	raceName - race name (all client supported languages)
+	languageCode - deDE, enGB, enUS, esES, esMX, frFR, itIT, koKR, ptBR, ptPT, ruRU, zhCN, zhTW or de, en, es, mx, fr, it, ko, pt, br, ru, cn, tw
+	genderIndex - 0=Neutral, 1=Male, 2=Female
+Returns (without 3. argument):
+	raceNameMale - male race name in choosen language
+	raceNameFemale - female race name in choosen language
+Returns (with 3. argument):
+	raceName - neutral, male or female race name in choosen language
+Examples:
+	"Orco", "Orchessa" = LibRaces:GetRaceName("Orc","itIT") -- Orc [english to italian]
+	"Elfa Sangrenta" = LibRaces:GetRaceName("Эльф крови","ptPT",2) -- Blood Elf [Russian to female portuguese]
+--]]
 
 --- Returns name of race by selected language and gender or both gender names of race by choosen language
 -- @paramsig name[, language[, gender]]
@@ -282,7 +309,7 @@ end
 -- @param gender Choose gender 1=male, 2=female (optional)
 -- @return Male and female name of race or name of race by selected gender
 function LibRaces:GetRaceName(raceName, lang, gender)
-	if self~=lib then raceName,lang,gender=self,raceName,lang; end
+	if self~=LibRaces then raceName,lang,gender=self,raceName,lang; end
 	assert(type(raceName)=="string","<LibRaces-1.0>:GetRaceName(<raceName(string)>[,<languageCode(string)>[,<gender(number 1=male|2=female)>]])");
 	lang = GetLanguageCode(lang);
 	if Unpack then Unpack(); end
@@ -296,8 +323,21 @@ function LibRaces:GetRaceName(raceName, lang, gender)
 	-- nil on fail
 end
 
+--[[
+Notes:
+	* returns nil if no match found
+Arguments:
+	raceName - race name (all client supported languages)
+Returns:
+	languageCodeN - a list of language code matching with given race name
+Example:
+	"deDE","enGB","enUS","frFR","itIT","ptBT","ptPT" = LibRaces:GetLanguageByRaceName("Troll")
+--]]
+---
+-- @param name
+-- @return
 function LibRaces:GetLanguageByRaceName(name)
-	if self~=lib then name = self; end
+	if self~=LibRaces then name = self; end
 	assert(type(name)=="string");
 	if Unpack then Unpack(); end
 	local lang = {};
@@ -313,8 +353,23 @@ function LibRaces:GetLanguageByRaceName(name)
 	end
 end
 
+--[[
+Notes:
+	* returns nil if no match found
+Arguments:
+	raceName - race name (all client supported languages)
+Returns:
+	genderIndex - 0=Neutral, 1=Male, 2=Female
+	genderName - english gender name (uppercase)
+Example:
+	2, "FEMALE" = LibRaces:GetGenderByRaceName("Nachtelfe") -- german female night elf
+--]]
+
+--- Returns gender of given race name
+-- @param name Name of a playable race (any client supported languages)
+-- @return The gender index (0=neutral, 1=male, 2=female) and english name of gender (uppercase)
 function LibRaces:GetGenderByRaceName(name)
-	if self~=lib then name = self; end
+	if self~=LibRaces then name = self; end
 	assert(type(name)=="string");
 	if Unpack then Unpack(); end
 	local g = gender[strip(name,true)];
@@ -323,12 +378,25 @@ function LibRaces:GetGenderByRaceName(name)
 	end
 end
 
+--[[
+Notes:
+	* if lang nil or not match with client supported language codes then it fall back to current client language
+	* returns nil if no match found
+Arguments:
+	lang - language code like enUS, zhCN, mx or tw (optional)
+Returns:
+	names - a table of names by selected language
+Example:
+	table = LibRaces:GetAllNamesByLanguage("ptBT")
+	/print LibStub("LibRaces-1.0"):GetAllNamesByLanguage("ptBT")
+--]]
+--- Returns a list of all race names by selected language or current client language
+-- @param lang Language code like deDE, ptBR or shorter like en or tw
+-- @return A table with localized race names
 function LibRaces:GetAllNamesByLanguage(lang)
-	if self~=lib then lang = self; end
+	if self~=LibRaces then lang = self; end
 	local result,tmp,lang,a,b = {},{};
-	print("lang",tostring(lang))
 	lang = GetLanguageCode(lang);
-	print("lang",tostring(lang))
 	for _,tbl in pairs(data)do
 		if tbl[lang] then
 			a,b = tbl[lang][1],tbl[lang][2];
@@ -348,8 +416,23 @@ function LibRaces:GetAllNamesByLanguage(lang)
 	return result,lang;
 end
 
+--[[
+Notes:
+	* returns nil if no match found
+Arguments:
+	text - a string containing a race name
+Returns:
+	raceLocaleName - localized name of only first found race
+	raceEngToken - english token of only first found race
+	raceEngName - english name of only first found race
+Example:
+	"Nachtelfe","NightElf","Night Elf" = LibRaces:FindRaceNameInText("Die junge Nachtelfe streift einsam durch den dunklen Wald.")
+--]]
+--- Finds race name in text and returns locaized and english race name
+-- @param text Text with race name
+-- @return Found race name in given language, english name without whitespaces and dashes and english race name
 function LibRaces:FindRaceNameInText(text)
-	if self~=lib then text = self; end
+	if self~=LibRaces then text = self; end
 	assert(type(text)=="string","Usage: <LibRaces-1.0>:FindRaceNameInText(<text>) - string expected, got "..type(text));
 	local names,res = LibRaces:GetAllNamesByLanguage();
 	-- damned limitation of lua pattern...
