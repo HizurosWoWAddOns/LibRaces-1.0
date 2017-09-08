@@ -1,8 +1,11 @@
+--- LibRaces-1.0 provides several functions around playable races in world of warcraft
+-- @class file
+-- @name LibRaces-1.0
 
 local MAJOR, MINOR = "LibRaces-1.0", 5
-local lib = LibStub:NewLibrary(MAJOR, MINOR)
+local LibRaces = LibStub:NewLibrary(MAJOR, MINOR)
 
-if not lib then return end
+if not LibRaces then return end
 
 local languageCodes = {en="enUS",de="deDE",es="esES",mx="esES",fr="frFR",it="itIT",ko="koKR",pt="ptBR",br="ptBR",ru="ruRU",cn="zhCN",tw="zhTW"};
 local altLangCode = {enUS="enGB",esES="esMX",ptBR="ptPT"};
@@ -180,6 +183,19 @@ local data = {
 	}
 };
 
+local function GetLanguageCode(lang)
+	if type(lang)=="string" then
+		local _lang=strsub(lang,0,2):lower();
+		print("1",_lang);
+		if _lang=="zh" then _lang=strsub(lang,3,4):lower(); end
+		print("2",_lang)
+		if languageCodes[_lang] then
+			return languageCodes[_lang];
+		end
+	end
+	return GetLocale(); -- fallback to client language
+end
+
 local function strip(str,normalize)
 	assert(type(str)=="string");
 	return (normalize==true and str:lower() or str):gsub(" ",""):gsub("-","");
@@ -243,11 +259,14 @@ local function Unpack(step,...)
 			end
 		end
 		Unpack = nil;
-		data = nil;
 	end
 end
 
-function lib:GetRaceToken(name)
+--- Returns english race token and name from any client supported language
+-- @param name Race name (all client supported languages)
+-- @return English tokenized race name (without dashes and whitespaces)
+-- @return English race name
+function LibRaces:GetRaceToken(name)
 	if self~=lib then name=self; end
 	if Unpack then Unpack(); end
 	local name = strip(name,true);
@@ -256,18 +275,10 @@ function lib:GetRaceToken(name)
 	end
 end
 
-function lib:GetRaceName(raceName, lang, gender)
+function LibRaces:GetRaceName(raceName, lang, gender)
 	if self~=lib then raceName,lang,gender=self,raceName,lang; end
-	assert(type(raceName)=="string","<LibRaces-1.0>:GetRace(<raceName(string)>[,<languageCode(string)>[,<gender(number 1=male|2=female)>]])");
-
-	if type(lang)=="string" then
-		local _lang=strsub(lang,0,2):lower();
-		if _lang=="zh" then _lang=strsub(lang,3,4):lower(); end
-		lang = languageCodes[_lang];
-	else
-		lang = GetLocale();
-	end
-
+	assert(type(raceName)=="string","<LibRaces-1.0>:GetRaceName(<raceName(string)>[,<languageCode(string)>[,<gender(number 1=male|2=female)>]])");
+	lang = GetLanguageCode(lang);
 	if Unpack then Unpack(); end
 	local race = races[strip(raceName,true)];
 		if race and race[lang] then
@@ -279,7 +290,7 @@ function lib:GetRaceName(raceName, lang, gender)
 	-- nil on fail
 end
 
-function lib:GetLanguageByRaceName(name)
+function LibRaces:GetLanguageByRaceName(name)
 	if self~=lib then name = self; end
 	assert(type(name)=="string");
 	if Unpack then Unpack(); end
@@ -296,7 +307,7 @@ function lib:GetLanguageByRaceName(name)
 	end
 end
 
-function lib:GetGenderByRaceName(name)
+function LibRaces:GetGenderByRaceName(name)
 	if self~=lib then name = self; end
 	assert(type(name)=="string");
 	if Unpack then Unpack(); end
