@@ -275,6 +275,12 @@ function LibRaces:GetRaceToken(name)
 	end
 end
 
+--- Returns name of race by selected language and gender or both gender names of race by choosen language
+-- @paramsig name[, language[, gender]]
+-- @param name Name of playable race (all client supported languages)
+-- @param language The language code like enUS, ptBR or shorter like de, tw or cn (optional)
+-- @param gender Choose gender 1=male, 2=female (optional)
+-- @return Male and female name of race or name of race by selected gender
 function LibRaces:GetRaceName(raceName, lang, gender)
 	if self~=lib then raceName,lang,gender=self,raceName,lang; end
 	assert(type(raceName)=="string","<LibRaces-1.0>:GetRaceName(<raceName(string)>[,<languageCode(string)>[,<gender(number 1=male|2=female)>]])");
