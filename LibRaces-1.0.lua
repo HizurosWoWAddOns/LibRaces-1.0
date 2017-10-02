@@ -2,7 +2,7 @@
 -- @class file
 -- @name LibRaces-1.0
 
-local MAJOR, MINOR = "LibRaces-1.0", 8
+local MAJOR, MINOR = "LibRaces-1.0", 9
 local LibRaces = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not LibRaces then return end
@@ -73,7 +73,7 @@ local data = {
 		zhCN = {"暗夜精灵","暗夜精灵"},
 		zhTW = {"夜精靈","夜精靈"}
 	},
-	["scourge"] = {
+	["undead"] = {
 		deDE = {"Untoter","Untote"},
 		enUS = {"Undead","Undead"},
 		esES = {"No-muerto","No-muerta"},
@@ -196,7 +196,11 @@ end
 
 local function strip(str,normalize)
 	assert(type(str)=="string");
-	return (normalize==true and str:lower() or str):gsub(" ",""):gsub("-","");
+	local name = (normalize==true and str:lower() or str):gsub(" ",""):gsub("%-",""):gsub("'","");
+	if name=="scourge" then
+		return "undead";
+	end
+	return name;
 end
 
 local function Unpack(step,...)
@@ -314,7 +318,7 @@ function LibRaces:GetRaceName(raceName, lang, gender)
 	lang = GetLanguageCode(lang);
 	if Unpack then Unpack(); end
 	local race = races[strip(raceName,true)];
-		if race and race[lang] then
+	if race and race[lang] then
 		if gender==1 or gender==2 then
 			return race[lang][gender];
 		end
