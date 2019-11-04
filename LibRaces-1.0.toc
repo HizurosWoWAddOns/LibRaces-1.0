@@ -1,6 +1,6 @@
 ## Interface: 80205
 ## Title: Lib: LibRaces-1.0
-## Notes: A library to easy translate localized races names to generic token like strings
+## Notes: A library to easy translate localized race names to generic token like strings
 ## Author: Hizuro
 ## Version: @project-version@
 ## OptionalDeps: LibStub, CallbackHandler-1.0
