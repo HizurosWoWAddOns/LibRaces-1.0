@@ -1,4 +1,6 @@
-## Interface: 90105
+## Interface: 90200
+## Interface-BCC: 20503
+## Interface-Classic: 11402
 ## Title: Lib: LibRaces-1.0
 ## Notes: A library to easy translate localized race names to generic token like strings
 ## Author: Hizuro
