@@ -1,4 +1,4 @@
-# AFK Fullscreen warning (WoW AddOn)
+# LibRaces-1.0 (WoW AddOn Library)
 ![Build](https://github.com/hizuro/LibRaces-1.0/actions/workflows/bigwigsmods-packager.yml/badge.svg)
 ![Tag](https://img.shields.io/github/v/tag/hizuro/LibRaces-1.0?style=flat-square)
 ![Downloads](https://img.shields.io/github/downloads/hizuro/LibRaces-1.0/total?style=flat-square)
