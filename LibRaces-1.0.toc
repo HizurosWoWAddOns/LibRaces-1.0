@@ -1,5 +1,5 @@
 ## Interface: 110100
-## Interface-Cata: 40401
+## Interface-Cata: 40402
 ## Interface-Classic: 11506
 ## Title: Lib: LibRaces-1.0
 ## Notes: A library to easy translate localized race names to generic token like strings
